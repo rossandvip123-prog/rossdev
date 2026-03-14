@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-
 <html>
+
 <head>
+
 <title>Ross's Dev</title>
 
 <style>
@@ -12,6 +13,7 @@ font-family:Arial;
 color:white;
 margin:0;
 text-align:center;
+overflow-x:hidden;
 }
 
 /* HEADER */
@@ -23,15 +25,15 @@ color:#38bdf8;
 box-shadow:0 0 20px #0ea5e9;
 margin:30px;
 border-radius:15px;
+animation:glow 3s infinite alternate;
 }
 
-/* SPOTIFY PLAYER */
-
-.music{
-margin-top:20px;
+@keyframes glow{
+from{box-shadow:0 0 20px #0ea5e9;}
+to{box-shadow:0 0 40px #38bdf8;}
 }
 
-/* HOME CARDS */
+/* CONTAINER */
 
 .container{
 display:flex;
@@ -40,6 +42,8 @@ gap:40px;
 flex-wrap:wrap;
 margin-top:40px;
 }
+
+/* CARD */
 
 .card{
 width:350px;
@@ -52,8 +56,8 @@ transition:0.3s;
 }
 
 .card:hover{
-transform:scale(1.05);
-box-shadow:0 0 40px #38bdf8;
+transform:scale(1.08) rotate(1deg);
+box-shadow:0 0 45px #38bdf8;
 }
 
 .card img{
@@ -76,16 +80,30 @@ color:#7dd3fc;
 .section{
 display:none;
 padding:40px;
+animation:fade 0.5s;
 }
+
+@keyframes fade{
+from{opacity:0; transform:translateY(20px);}
+to{opacity:1; transform:translateY(0);}
+}
+
+/* PROJECT IMAGES */
 
 img.project{
 max-width:600px;
 margin:20px;
 border-radius:10px;
 box-shadow:0 0 20px #0ea5e9;
+transition:0.3s;
 }
 
-/* BUTTONS */
+img.project:hover{
+transform:scale(1.05);
+box-shadow:0 0 40px #38bdf8;
+}
+
+/* BUTTON */
 
 button{
 margin-top:30px;
@@ -96,13 +114,15 @@ border-radius:10px;
 color:white;
 cursor:pointer;
 font-size:16px;
+transition:0.3s;
 }
 
 button:hover{
 background:#38bdf8;
+transform:scale(1.05);
 }
 
-/* DISCORD BUTTON */
+/* DISCORD */
 
 .discord{
 background:#5865F2;
@@ -113,25 +133,112 @@ box-shadow:0 0 15px #5865F2;
 background:#4752C4;
 }
 
+/* IMAGE SLIDER */
+
+.viewer{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.9);
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+.viewer img{
+max-width:80%;
+border-radius:10px;
+box-shadow:0 0 40px #38bdf8;
+}
+
+.controls{
+margin-top:20px;
+}
+
+.controls button{
+margin:10px;
+font-size:20px;
+}
+
+.close{
+position:absolute;
+top:20px;
+right:40px;
+font-size:40px;
+cursor:pointer;
+}
+
 </style>
 
 <script>
 
+let currentImage = 0
+
+const burgerImages = [
+"bk1.png",
+"bk2.png",
+"bk3.png",
+"bk4.png"
+]
+
 function showSection(section){
 
-document.getElementById("home").style.display="none";
-document.getElementById("scripts").style.display="none";
-document.getElementById("maps").style.display="none";
+document.getElementById("home").style.display="none"
+document.getElementById("scripts").style.display="none"
+document.getElementById("maps").style.display="none"
 
-document.getElementById(section).style.display="block";
+document.getElementById(section).style.display="block"
 
 }
 
 function goHome(){
 
-document.getElementById("home").style.display="block";
-document.getElementById("scripts").style.display="none";
-document.getElementById("maps").style.display="none";
+document.getElementById("home").style.display="block"
+document.getElementById("scripts").style.display="none"
+document.getElementById("maps").style.display="none"
+
+}
+
+/* BURGER KING VIEWER */
+
+function openBurger(){
+
+document.getElementById("viewer").style.display="flex"
+currentImage = 0
+document.getElementById("slide").src = burgerImages[currentImage]
+
+}
+
+function closeViewer(){
+
+document.getElementById("viewer").style.display="none"
+
+}
+
+function next(){
+
+currentImage++
+
+if(currentImage >= burgerImages.length){
+currentImage = 0
+}
+
+document.getElementById("slide").src = burgerImages[currentImage]
+
+}
+
+function prev(){
+
+currentImage--
+
+if(currentImage < 0){
+currentImage = burgerImages.length - 1
+}
+
+document.getElementById("slide").src = burgerImages[currentImage]
 
 }
 
@@ -145,21 +252,7 @@ document.getElementById("maps").style.display="none";
 Ross's Dev
 </div>
 
-<!-- SPOTIFY PLAYER -->
-
-<div class="music">
-
-<iframe style="border-radius:12px"
-src="https://open.spotify.com/embed/track/7vFoFDWqTX0mHzLfrF1Cfy?utm_source=generator"
-width="300"
-height="80"
-frameBorder="0"
-allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-</iframe>
-
-</div>
-
-<!-- HOME PAGE -->
+<!-- HOME -->
 
 <div id="home">
 
@@ -168,7 +261,6 @@ allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-pictur
 <div class="card" onclick="showSection('scripts')">
 
 <img src="script.jpeg">
-
 <h2>Script Development</h2>
 <p>Projects</p>
 
@@ -177,7 +269,6 @@ allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-pictur
 <div class="card" onclick="showSection('maps')">
 
 <img src="map.png">
-
 <h2>Map Development</h2>
 <p>Projects</p>
 
@@ -193,7 +284,7 @@ allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-pictur
 
 </div>
 
-<!-- SCRIPTS PAGE -->
+<!-- SCRIPTS -->
 
 <div id="scripts" class="section">
 
@@ -214,7 +305,7 @@ allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-pictur
 
 </div>
 
-<!-- MAP PAGE -->
+<!-- MAP DEV -->
 
 <div id="maps" class="section">
 
@@ -235,9 +326,30 @@ allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-pictur
 <h2>Jet2 Cabin</h2>
 <img class="project" src="jet2.png">
 
+<h2>Burger King Build</h2>
+
+<img class="project" src="bk1.png" onclick="openBurger()">
+
 <br>
 
 <button onclick="goHome()">Back</button>
+
+</div>
+
+<!-- BURGER KING SLIDER -->
+
+<div id="viewer" class="viewer">
+
+<span class="close" onclick="closeViewer()">×</span>
+
+<img id="slide">
+
+<div class="controls">
+
+<button onclick="prev()">❮</button>
+<button onclick="next()">❯</button>
+
+</div>
 
 </div>
 
